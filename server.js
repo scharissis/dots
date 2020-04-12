@@ -3,6 +3,7 @@ var express = require("express");
 var http = require("http");
 var path = require("path");
 var socketIO = require("socket.io");
+var state = require("./state.js");
 
 var app = express();
 var server = http.Server(app);
@@ -21,40 +22,27 @@ server.listen(5000, function () {
   console.log("Starting server on port 5000");
 });
 
-// Add the WebSocket handlers
-io.on("connection", function (socket) {});
-
-// STATE
-var players = {};
+// Attach websocket handlers.
+var gameState = state.getState();
 io.on("connection", function (socket) {
+  var playerID = socket.id;
+
   socket.on("new player", function () {
-    players[socket.id] = {
-      x: 300,
-      y: 300,
-    };
+    state.createNewPlayer(playerID);
+    console.log("Player", playerID, "joined!");
   });
 
-  socket.on("movement", function (data) {
-    var player = players[socket.id] || {};
-    if (data.left) {
-      player.x -= 5;
-    }
-    if (data.up) {
-      player.y -= 5;
-    }
-    if (data.right) {
-      player.x += 5;
-    }
-    if (data.down) {
-      player.y += 5;
-    }
+  socket.on("movement", function (direction) {
+    state.movePlayer(playerID, direction);
   });
 
   socket.on("disconnect", function () {
-    // remove disconnected player
+    state.removePlayer(playerID);
+    console.log("Player", playerID, "disconnected!");
   });
 });
 
+// Broadcast the game state.
 setInterval(function () {
-  io.sockets.emit("state", players);
+  io.sockets.emit("state", gameState);
 }, 1000 / 60);

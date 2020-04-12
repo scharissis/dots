@@ -55,14 +55,18 @@ setInterval(function () {
 var canvas = document.getElementById("canvas");
 canvas.width = 800;
 canvas.height = 600;
-var context = canvas.getContext("2d");
-socket.on("state", function (players) {
-  context.clearRect(0, 0, 800, 600);
-  context.fillStyle = "green";
+var ctx = canvas.getContext("2d");
+
+socket.on("state", function (gameState) {
+  var players = gameState.players;
+
+  ctx.clearRect(0, 0, 800, 600);
+  ctx.fillStyle = "green";
   for (var id in players) {
     var player = players[id];
-    context.beginPath();
-    context.arc(player.x, player.y, 10, 0, 2 * Math.PI);
-    context.fill();
+    ctx.beginPath();
+    ctx.arc(player.x, player.y, 10, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.fillText(player.id, player.x + 10, player.y + 10);
   }
 });
