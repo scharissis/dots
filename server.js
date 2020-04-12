@@ -30,6 +30,7 @@ io.on("connection", function (socket) {
   socket.on("new player", function () {
     state.createNewPlayer(playerID);
     console.log("Player", playerID, "joined!");
+    io.sockets.emit("new player added", gameState.players[playerID]);
   });
 
   socket.on("movement", function (direction) {
