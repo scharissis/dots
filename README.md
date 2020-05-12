@@ -2,6 +2,8 @@
 
 node + socket.io + boids
 
+![Image of DOTS](static/img/dots.png)
+
 ## Install
 `npm install`
 
