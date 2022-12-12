@@ -24,7 +24,7 @@
   "dependencies": {
     "boids": "^2.0.0",
     "browserify": "^16.5.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "raf": "^3.4.1",
     "socket.io": "^2.4.1"
   }
